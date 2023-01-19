@@ -10,20 +10,112 @@
 
     </head>
     <body>
-
+    <div class ="page">
         <div class="header">
             <h1>Assignment 1 was BLINK!</h1>
+            <h2><u>Project Description:</u></h2>
+            <p>This project required us to create a circuit with atleast 3 LEDs
+                blinking in a pattern. Here you will find the firmware code,
+                schematic, resistor calculations, and a short video of the circuit!
+            </p>
             <body>
-                <h1> This is a video: </h1>
-                <video src="blink video.mp4"></video>
+                <h2><u>Here is the video:</u></h2>
+                <video src="Blink assets/blink video.mp4" controls width="600"></video>
+                <p>It's pretty snazzy I must say! But how did we get here? First we have to gather
+                    our hardware. This project was built using the Arduino, breadboad, 5 LEDs (2 Green,
+                    2 Red, 1 Blue), ohm resistors, and jump wires. Then I did some
+                    some calculations to measure resistor voltage, desired currents, and
+                    required resistance. The calculations for those can be found below:
+                </p>
             </body>
             <p>
-            <img src="red-panda.jpg" width=400></a>
+            <img src="Blink assets/calculations blink.jpg" width=400></a>
             </p>
-            <p>
-            Here is all the documentation for assignment 1!
+            <p> Based on our calculations, the nearest resistor value available in our kit is
+                250 or 330 ohms. I decided to use the 330 ohm resistors. We can draw our schematic now!
+            <h2><u>Circuit and Schematic</u></h2>
+            <div class ="row">
+                <div class = "column">
+                    <img src = "Blink assets/Blink Schematic.jpg" style="width:100%">
+                </div>
+                <div class = "column">
+                    <img src = "Blink assets/circuit blink.jpg" style="width:100%">
+                    </div>
+            </div>
             </p>
-        </div>
+                </div>
+                </div>
+            <h2><u>Code:</u></h2>
+            <p>-Here is the code snippet-
+                <div class = "codebox">
+                    <pre>
+// set corresponding LED colors to their designated ports
+
+int Red = 8;
+int Green = 7;
+int Blue = 6;
+int Green2 = 5;
+int Red2 = 4;
+
+void setup() {
+
+// define ports 8, 7, 6, 5, 4 as outputs for each LED/pin
+
+  pinMode(Red, OUTPUT);
+  pinMode(Green, OUTPUT);
+  pinMode(Blue, OUTPUT);
+  pinMode(Green2, OUTPUT);
+  pinMode(Red2, OUTPUT);
+
+}
+
+void loop() {
+
+// continuous running of code
+// HIGH = voltage level; turns LED ON
+// LOW = voltage level; turn LED OFF
+// Delay 500 = wait for 0.5 seconds.
+// Linear blinking pattern.
+
+  digitalWrite(Red, HIGH);
+  digitalWrite(Green, LOW);
+  digitalWrite(Blue, LOW);
+  digitalWrite(Green2, LOW);
+  digitalWrite(Red2, LOW);
+  delay(500);
+
+  digitalWrite(Red, LOW);
+  digitalWrite(Green, HIGH);
+  digitalWrite(Blue, LOW);
+  digitalWrite(Green2, LOW);
+  digitalWrite(Red2, LOW);
+  delay(500);
+
+  digitalWrite(Red, LOW);
+  digitalWrite(Green, LOW);
+  digitalWrite(Blue, HIGH);
+  digitalWrite(Green2, LOW);
+  digitalWrite(Red2, LOW);
+  delay(500);
+
+  digitalWrite(Red, LOW);
+  digitalWrite(Green, LOW);
+  digitalWrite(Blue, LOW);
+  digitalWrite(Green2, HIGH);
+  digitalWrite(Red2, LOW);
+  delay(500);
+
+  digitalWrite(Red, LOW);
+  digitalWrite(Green, LOW);
+  digitalWrite(Blue, LOW);
+  digitalWrite(Green2, LOW);
+  digitalWrite(Red2, HIGH);
+  delay(500);
+
+}
+                    </pre>
+                </div>
+            </p>
 
     </body>
 </html>
