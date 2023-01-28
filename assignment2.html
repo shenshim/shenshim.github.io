@@ -53,46 +53,45 @@
                 <div class = "codebox">
                     <pre>
                     
-                        int ledBlue = 6;
-                        int ledBlue2 = 5;
-                        int bt = 8;
-                        const int fade = 5;
+        int ledBlue = 6;
+        int ledBlue2 = 5;
+        int bt = 8;
+        const int fade = 5;
                         
-                        void setup() {
+        void setup() {
 
-                        pinMode(bt, INPUT);
-                        pinMode(ledBlue, OUTPUT);
-                        pinMode(ledBlue2, OUTPUT);
+        pinMode(bt, INPUT);
+        pinMode(ledBlue, OUTPUT);
+        pinMode(ledBlue2, OUTPUT);
                         
-                        }
+        }
                         
-                        void loop() {
+        void loop() {
                         
-                          int btState = digitalRead(bt);
+        int btState = digitalRead(bt);
                         
-                          if(btState == HIGH){ //when button is on 
+        if(btState == HIGH){ //when button is on 
                         
-                            for(int i=0; i<= 255; i++){
-                              analogWrite(ledBlue, 255-i);
-                              delay(fade);
+            for(int i=0; i<= 255; i++){
+                analogWrite(ledBlue, 255-i);
+                    delay(fade);
                             }
                         
-                             for(int i=0; i<= 255; i++){
-                              analogWrite(ledBlue2, 255-i);
-                              delay(fade);
+            for(int i=0; i<= 255; i++){
+            analogWrite(ledBlue2, 255-i);
+             delay(fade);       
                         
+            btState = digitalRead(bt);
+                if(btState == LOW)
+                    break;
+                    else{
+                    digitalWrite(ledBlue, LOW);
+                    digitalWrite(ledBlue2, LOW);
+                    }
+                }
+            }
+        }
                         
-                              btState = digitalRead(bt);
-                              if(btState == LOW)
-                                break;
-                              else{
-                                digitalWrite(ledBlue, LOW);
-                                digitalWrite(ledBlue2, LOW);
-                              }
-                            }
-                          }
-                        }
-                    
                     </pre>
                 </div>
             </p>
