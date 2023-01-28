@@ -1,25 +1,107 @@
-<!DOCTYPE html> 
-<html> 
-    <head> 
-        <meta charset="utf-8"> 
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, maximum-scale=1.0" />
 
-        <title>Example Student's HCDE 439 Physical Computing Page!</title> 
+        <title>Assignment 2 - FADE!</title>
 
         <link href="style.css" media="screen" rel="stylesheet" type="text/css" />
 
-    </head> 
-    <body> 
-
+    </head>
+    <body>
+    <div class ="page">
         <div class="header">
-            <h1>Example Student's Assignment 2!</h1>
-            <p>
-            <img src="red-panda.jpg" width=400></a>
+            <h1>Assignment 1 was FADE!</h1>
+            <h2><u>Project Description:</u></h2>
+            <p>In this assignment, we created a circuit that uses more than one LED, a button or switch
+            a for-loop, and all three of digitalWrite(), digitalRead(), and analogWrite(). Additionally, 
+            atleast one of our LEDs should fade. 
             </p>
+            <body>
+                <h2><u>Here is the video:</u></h2>
+                <video src="Fade assets/fade.mp4" controls width="600"></video>
+                <p>It's pretty snazzy I must say! But how did we get here? First we have to gather
+                    our hardware. This project was built using the Arduino, breadboad, 5 LEDs (2 Green,
+                    2 Red, 1 Blue), ohm resistors, and jump wires. Then I did some
+                    some calculations to measure resistor voltage, desired currents, and
+                    required resistance. The calculations for those can be found below:
+
+                    The button and fading LEDs really add that extra oomph to the circuit compared to 
+                    assignment 1! How did we get here? First we gather our hardware like always- for this 
+                    project I used an Arduino Uno, breadboard, 2 blue LEDs, ohm resisters, and jump wires.
+                    I did some calculations to measure resistor voltage, desired currents, and required 
+                    resistance. The calculations are below:
+                </p>
+            </body>
             <p>
-            Here is all the documentation for assignment 2!
+            <img src="Fade assets/calculations fade.jpg" width=400></a>
             </p>
-        </div>
-        
+            <p> Based on our calculations, the nearest resistor value available in our kit is
+                250 or 330 ohms. I decided to use the 1k ohm resistor this time. For the resistor on 
+                the button, it is being used as a pull-up/pull-down resistor with a value of 10k ohms.  
+                We can draw our schematic now!
+            <h2><u>Circuit and Schematic:</u></h2>
+            <div class ="row">
+                <div class = "column">
+                    <img src = "Blink assets/Blink Schematic.jpg" style="width:100%">
+                </div>
+                <div class = "column">
+                    <img src = "Fade assets/fadeimg.jpeg" style="width:100%">
+                    </div>
+            </div>
+            </p>
+                </div>
+                </div>
+            <h2><u>Code:</u></h2>
+            <p>-Here is the code snippet-
+                <div class = "codebox">
+                    <pre>
+                    
+                        int ledBlue = 6;
+                        int ledBlue2 = 5;
+                        int bt = 8;
+                        const int fade = 5;
+                        
+                        void setup() {
+
+                        
+                        pinMode(bt, INPUT);
+                        pinMode(ledBlue, OUTPUT);
+                        pinMode(ledBlue2, OUTPUT);
+                        
+                        }
+                        
+                        void loop() {
+                        
+                          int btState = digitalRead(bt);
+                        
+                          if(btState == HIGH){ //when button is on 
+                        
+                            for(int i=0; i<= 255; i++){
+                              analogWrite(ledBlue, 255-i);
+                              delay(fade);
+                            }
+                        
+                             for(int i=0; i<= 255; i++){
+                              analogWrite(ledBlue2, 255-i);
+                              delay(fade);
+                        
+                        
+                              btState = digitalRead(bt);
+                              if(btState == LOW)
+                                break;
+                              else{
+                                digitalWrite(ledBlue, LOW);
+                                digitalWrite(ledBlue2, LOW);
+                              }
+                            }
+                          }
+                        }
+                    
+                    </pre>
+                </div>
+            </p>
+
     </body>
 </html>
