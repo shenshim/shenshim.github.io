@@ -34,12 +34,13 @@
             </p>
             <p> Based on our calculations, the nearest resistor value available in our kit is
                 250 or 330 ohms. I decided to use the 1k ohm resistor this time. For the resistor on 
-                the button, it is being used as a pull-up/pull-down resistor with a value of 10k ohms.  
+                the button, it is being used as a pull-up/pull-down resistor with a value of 10k ohms (since the 10k
+                helps limik to the current to half milliampere also reduces power consumption of circuit).  
                 We can draw our schematic now!
             <h2><u>Circuit and Schematic:</u></h2>
             <div class ="row">
                 <div class = "column">
-                    <img src = "Blink assets/Blink Schematic.jpg" style="width:100%">
+                    <img src = "Fade assets/FADE.jpeg" style="width:100%">
                 </div>
                 <div class = "column">
                     <img src = "Fade assets/fadeimg.jpeg" style="width:100%">
@@ -52,45 +53,58 @@
             <p>-Here is the code snippet-
                 <div class = "codebox">
                     <pre>
-                    
-        int ledBlue = 6;
-        int ledBlue2 = 5;
-        int bt = 8;
-        const int fade = 5;
+    // set corresponding LED colors to designated ports.                 
+    int ledBlue = 6;
+    int ledBlue2 = 5;
+    //define pin to read button status
+    int bt = 8;
+    // set default time it takes for LED to fade
+    const int fade = 5;
                         
-        void setup() {
+    void setup() {
+    // define ports 6,5 and 8 as outputs for the LEDs + Button
+    pinMode(bt, INPUT);
+    pinMode(ledBlue, OUTPUT);
+    pinMode(ledBlue2, OUTPUT);
+                        
+    }
+                        
+    void loop() {
+    // set code to run repeatedly                     
+    int btState = digitalRead(bt); 
 
-        pinMode(bt, INPUT);
-        pinMode(ledBlue, OUTPUT);
-        pinMode(ledBlue2, OUTPUT);
+    /* reads if button is active (pressed) or inactive (null)
+    if the button is pressed (== HIGH) it will trigger a for loop that 
+    checks if integer 'i' is lower than 255. if it is, the value of 'i' 
+    is increased by one. once it is equal or higher than 255, one is 
+    subtracted by one each time it is checked. Once that number reaches 
+    0, the process is repeated again. */
+
+    if(btState == HIGH){  
                         
-        }
-                        
-        void loop() {
-                        
-        int btState = digitalRead(bt);
-                        
-        if(btState == HIGH){ //when button is on 
-                        
-            for(int i=0; i<= 255; i++){
-                analogWrite(ledBlue, 255-i);
-                    delay(fade);
-                            }
-                        
-            for(int i=0; i<= 255; i++){
-            analogWrite(ledBlue2, 255-i);
-             delay(fade);       
-                        
-            btState = digitalRead(bt);
-                if(btState == LOW)
-                    break;
-                    else{
-                    digitalWrite(ledBlue, LOW);
-                    digitalWrite(ledBlue2, LOW);
-                    }
+    for(int i=0; i<= 255; i++){
+        // update status of pins on PWM
+        analogWrite(ledBlue, 255-i);
+        // making things quicker; change delay time to int fade
+            delay(fade);
+                        }
+        // do the same for other LED                
+        for(int i=0; i<= 255; i++){
+        analogWrite(ledBlue2, 255-i);
+             delay(fade);   
+             
+        btState = digitalRead(bt); // read when button is off
+            if(btState == LOW)
+            // exit from forloop
+                break;
+            // or turn off LEDs before cycling through function again 
+                else{
+                digitalWrite(ledBlue, LOW);
+                digitalWrite(ledBlue2, LOW);
                 }
             }
         }
+    }
                         
                     </pre>
                 </div>
