@@ -34,8 +34,8 @@
             </p>
             <p> Based on our calculations, the nearest resistor value available in our kit is
                 250 or 330 ohms. I decided to use the 1k ohm resistor this time. For the resistor on 
-                the button, it is being used as a pull-up/pull-down resistor with a value of 10k ohms (since the 10k
-                helps limik to the current to half milliampere also reduces power consumption of circuit).  
+                the button, it is being used as a pull-up/pull-down resistor with a value of 10k ohms 
+                (since the 10k helps limik to the current to half milliampere also reduces power consumption of circuit).  
                 We can draw our schematic now!
             <h2><u>Circuit and Schematic:</u></h2>
             <div class ="row">
@@ -82,14 +82,14 @@
 
     if(btState == HIGH){  
                         
-    for(int i=0; i<= 255; i++){
+    for(int i=0; i <= 255; i++){
         // update status of pins on PWM
         analogWrite(ledBlue, 255-i);
         // making things quicker; change delay time to int fade
             delay(fade);
                         }
         // do the same for other LED                
-        for(int i=0; i<= 255; i++){
+        for(int i=0; i <= 255; i++){
         analogWrite(ledBlue2, 255-i);
              delay(fade);   
              
