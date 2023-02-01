@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, maximum-scale=1.0" />
+
+    <title>Assignment 1 - Input Output!</title>
+
+    <link href="style.css" media="screen" rel="stylesheet" type="text/css" />
+
+</head>
+
+<body>
+    <div class="page">
+        <div class="header">
+            <h1>Assignment 1 was Input Output!</h1>
+            <h2><u>Project Description:</u></h2>
+            <p>This project required us to build a circuit using a sensor in a voltage divide to change
+                the state of an output device. My schematic explains the values chosen. Other requirements
+                included using analogRead(),analogWrite(), the map function, and an if-statement in our code.
+            </p>
+
+            <body>
+                <h2><u>Here is the video:</u></h2>
+                <video src="Inputoutput assets/inputoutput.mp4" controls width="600"></video>
+                <p> When it detects that the light levels are low, it fades the LED on (or off depending on if it
+                    detects light).
+                    It's pretty snazzy I must say! But how did we get here? First we have to gather
+                    our hardware. This project was built using the Arduino, breadboad, one red LED,
+                    an ohm resistor, a photoresistor and jump wires. Then I did some
+                    some calculations to measure appropriate resistor voltage and map equations.
+                    The calculations for those can be found below:
+
+                <h4><u>Photoresistor</u></h4>
+                <p>V = I x R
+                    5V = 5mA. x R
+                    R = 1k ohms ; value of resistor used in project
+                </p>
+                <h4><u>Red LED</u></h4>
+                <p> Red LED = 2.4V ; forward voltage
+                    5V - 2.4V = 2.6V ; resistor voltage
+                    Desired current = I = 15mA
+                    Required resistance = R = V/I = 2.6/0.015 = around 167 ohms. I used a 330 resistor for this project.
+                </p>
+                <h2><u>Circuit and Schematic:</u></h2>
+                <div class="row">
+                    <div class="column">
+                        <img src="Inputoutput assets/schematic.jpeg" style="width:100%">
+                    </div>
+                    <div class="column">
+                        <img src="Inputoutput assets/inputoutput.jpeg" style="width:100%">
+                    </div>
+                </div>
+                </p>
+        </div>
+    </div>
+    <h2><u>Code:</u></h2>
+    <p>-Here is the code snippet-
+    <div class="codebox">
+        <pre>
+                        int ledPin = 10;
+                        int pResistor = A0;
+                        int sensorValue = 0;
+                        int sensorMAX, sensorMIN;
+                        
+                        void setup() {
+                          pinMode(ledPin, OUTPUT);
+                          while (millis() < 3000) {
+                            sensorValue = analogRead(pResistor);
+                            if (sensorValue > sensorMAX) {
+                              sensorMAX = sensorValue;
+                            }
+                            if (sensorValue < sensorMIN) {
+                              sensorMIN = sensorValue;
+                            }
+                            Serial.begin(9600);
+                          }
+                        }
+                        
+                        void loop() {
+                          sensorValue = analogRead(pResistor);
+                          Serial.println(sensorValue);
+                        
+                          if (sensorValue > 60 && sensorValue < 150) {
+                            digitalWrite(ledPin, LOW);
+                          } else {
+                            analogWrite(10, map(sensorValue, 250, 60, 5, 150));
+                          }
+                          delay(5);
+                        }
