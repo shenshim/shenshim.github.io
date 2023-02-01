@@ -59,14 +59,22 @@
     <p>-Here is the code snippet-
     <div class="codebox">
         <pre>
+                        // initialize values for LED (pin 10) and pResistor (analog out value). 
                         int ledPin = 10;
                         int pResistor = A0;
+                        // initial sensor values 
                         int sensorValue = 0;
+                        // declare MAX/MIN integers for function; can leave empty
                         int sensorMAX, sensorMIN;
                         
                         void setup() {
+                        // set red LED as output. 
                           pinMode(ledPin, OUTPUT);
+
+                        //callibrate during first 3 seconds
                           while (millis() < 3000) {
+
+                        //record the maxminum and minimum sensor values
                             sensorValue = analogRead(pResistor);
                             if (sensorValue > sensorMAX) {
                               sensorMAX = sensorValue;
@@ -74,18 +82,23 @@
                             if (sensorValue < sensorMIN) {
                               sensorMIN = sensorValue;
                             }
+                        //set up serial monitor to see values on ino
                             Serial.begin(9600);
                           }
                         }
                         
                         void loop() {
+                        // read from sensor 
                           sensorValue = analogRead(pResistor);
+                        // print to serial monitor to see values on ino  
                           Serial.println(sensorValue);
-                        
+                        // if sensor value is high (in bright environment), led will stay off/turn off. 
                           if (sensorValue > 60 && sensorValue < 150) {
                             digitalWrite(ledPin, LOW);
                           } else {
-                            analogWrite(10, map(sensorValue, 250, 60, 5, 150));
+                        // apply calibration to sensor readings (sensor value, min, max, 0, 255) remember to test it a few times! 
+                            analogWrite(10, map(sensorValue, 200, 40, 0, 255));
                           }
+                        // fade LED using calibrated values with slight delay 
                           delay(5);
                         }
