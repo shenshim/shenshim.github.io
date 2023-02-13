@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, maximum-scale=1.0" />
+
+        <title>Assignment 4 - Libraries!</title>
+
+        <link href="style.css" media="screen" rel="stylesheet" type="text/css" />
+
+    </head>
+    <body>
+    <div class ="page">
+        <div class="header">
+            <h1>Assignment 4 was Libaries!</h1>
+            <h2><u>Project Description:</u></h2>
+            <p>This project required us to create a circuit with 2 libraries, and both and input and output component.
+                Here you will find the firmware code, schematic/photos and super cute gif of the circuit; 
+                run with the help from Douglas (the kitty assistant). 
+            </p>
+            <body>
+                <h2><u>Here is the video:</u></h2>
+                <video src="Libraries assets/Libraries.mp4" controls width="600"></video>
+                <p> Look at Doug holding down that wire! Very helpful- but how did we get here? First we have to gather
+                    our hardware. This project was built using the Arduino, the ultrasonic sensor, a microservo,
+                    and a handful of jumpwires. 
+                </p>
+            </body>
+            <p>
+            <img src="Libraries assets/Screen Shot 2023-02-13 at 8.18.31 AM.png" width=400></a>
+            </p>
+            <p> The circuit was designed to mimic an automatic door, where if you get close to it, it "opens". In this case,
+                the servo is turning at an angle of 70 degrees. I used the Arduino's servo library and ultrasonic library by Erick Simoes
+                for more efficient calculationsn (<a href=” ”>https://github.com/ErickSimoes/Ultrasonic</a>).
+            <h2><u>Circuit and Schematic:</u></h2>
+            <div class ="row">
+                <div class = "column">
+                    <img src = "Libraries assets/LIBRARIES.jpeg" style="width:100%">
+                </div>
+                <div class = "column">
+                    <img src = "Libraries assets/libraries circuit.jpeg" style="width:100%">
+                    </div>
+            </div>
+            </p>
+                </div>
+                </div>
+            <h2><u>Code:</u></h2>
+            <p>-Here is the code snippet-
+                <div class = "codebox">
+                    <pre>
+
+    // include libraries 
+    #include <Servo.h>
+    #include <Ultrasonic.h>
+    // class servo, for controlling servo motor
+    Servo servo;
+    // class called ultrasonic that sets trig and echo pins of sensor to pins 10 and 11
+    Ultrasonic ultrasonic(10, 11);
+    #define trig 10
+    #define echo 11
+    //declare integever variable called angle, which is initialized at 0, which is the starting position of our servo motor. 
+    int angle = 0;
+    
+    
+    void setup() {
+    // attach servo motor to pin 8
+      servo.attach(8);
+    // set baud rate for serial communication at 9600
+      Serial.begin(9600);
+    // trig pin for ultrasonic sensor to OUTPUT
+      pinMode(trig, OUTPUT);
+    // echo pin for ultrasonic sensor as INPUT
+      pinMode(echo, INPUT);
+    }
+    
+    void loop() {
+    // we'll use duration and distance to store duration and distance of a pulse.
+    // obtained by calling the read() method of Ultrasonic library!
+      digitalWrite(trig, LOW);
+      digitalWrite(echo, LOW);
+      delayMicroseconds(5);
+    // give 5 microseconds for trigger and echo to be set from LOW to HIGH
+      digitalWrite(trig, HIGH);
+      delayMicroseconds(10);
+    // set trig pin to high and wait 10 microseconds for calculation
+      digitalWrite(trig, LOW);
+    // sets tig pin back to low. 
+    
+    // from the calculations made above, this line measures pulse and duration of the sensor 
+    // which is then converted to cm by the ultrasonic sensor. 
+      duration = pulseIn(echo, HIGH);
+      distance = ultrasonic.read();
+    
+    // if the distance measured is less than 10cm 
+      if (distance < 10) {
+    // the angle variable will be set to 70 degrees
+        angle = 70;
+    // and the system will write "door's open." on our serial monitor
+        Serial.println("door's open.");
+    // wit 500 miliseconds
+        delay(500);
+    
+      } else {
+    // but if distance is greater than 10cm, angle remains at 0. 
+        angle = 0;
+        delay(500);
+    
+      }
+    // call write method in servo library to display angle stored in angle variable
+      servo.write(angle);
+    // prints string distance: to serial monitor
+      Serial.print("distance: ");
+    // prints value stored in distance to serial monitor
+      Serial.print(distance);
+    // prints string cm to serial monitor
+      Serial.println("cm");
+    }
+
+    Thanks for viewing!
+    
+                    </pre>
+                </div>
+            </p>
+
+    </body>
+</html>
