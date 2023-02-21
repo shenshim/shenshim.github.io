@@ -30,19 +30,33 @@
                     <div class="column">
                         <video src="Higher Voltage assets/fast.mp4" controls width="300"></video>
                     </div>
-                    <p> When the sensor detects something less than 10cm away, the motor is noticeably
-                        slower. Pretty cool, eh? But how did we get here? First we have to gather
-                        our hardware and do some calculations. calculation**
-                    </p>
                 </div>
             </body>
 
-            <p> Based on our calculations, the nearest resistor value available in our kit is
-                250 or 330 ohms. I decided to use the 330 ohm resistors. Now we can draw our schematic!
+            <p> When the sensor detects something less than 10cm away, the motor is noticeably
+                slower. Cool. The transistor allows you to control a circuit that is carrying 
+                higher current and voltage from the microcontroller. Make sure to connect your 
+                diode to circuit correctly!
+
+                <pre>
+
+                    Our DC motor has a voltage rating of 6V, with a stall current of 800mA, and free
+                    run current of 70mA. Our N-MOSFET's max voltage rating is at 60V, with a maxmimum 
+                    current rating of 64A. Since the maximum voltage rating of the N-MOSFET is 
+                    higher than the maximum voltage of the DC motor, our circuit should be okay. 
+
+                    Additionally, the stall current of our motor is at 800mA. Based onthe N-MOSFET
+                    maximum drain current of 64A, it's capable of driving the 6V motor. With a 
+                    transistor threshold voltage of 3V, the 5V from our arduino is able to turn on.
+
+                    Now we can draw our schematic now!
+
+                </pre>
+
             <h2><u>Circuit and Schematic:</u></h2>
             <div class="row">
                 <div class="column">
-                    <img src="Higher Voltage assets/schematic.png" style="width:100%">
+                    <img src="Higher Voltage assets/schematic 1.png" style="width:100%">
                 </div>
                 <div class="column">
                     <img src="Higher Voltage assets/circuit.png" style="width:100%">
@@ -52,20 +66,27 @@
         </div>
     </div>
     <h2><u>Code:</u></h2>
-    <p>-Here is the code snippet-
+    <p>- Here's the code snippet -
     <div class="codebox">
         <pre>
-                            #include <Servo.h>
                             #include <Ultrasonic.h>
-                            
-                            Servo servo;
+            
+                            // initialize variables 
+                            // trigger pin as pin 10
+                            // echo pin as pin 11
+                            // define pin controlling motor as PNW pin 6
+
                             Ultrasonic ultrasonic(10, 11);
-                            
                             #define trig 10
                             #define echo 11
                             const int motorControl = 6;
                             
                             void setup() {
+                            
+                            // motorControl pin as output
+                            // start serial communication
+                            // set ultrasonic pins as output 
+
                               pinMode(motorControl, OUTPUT);
                               Serial.begin(9600);
                               pinMode(trig, OUTPUT);
@@ -74,28 +95,46 @@
                             
                             void loop() {
                             
+                            // declare and hold variables duration and distance
                               long duration, distance;
+
+                            // trigger pin off
+                            // echo pin off 
                               digitalWrite(trig, LOW);
                               digitalWrite(echo, LOW);
-                              delayMicroseconds(2);
+                            
+                            // give a short delay for system to calibrate. wait 10 miliseconds
+                              delay(20);
+
+                            // set trigger and echo pins as high (on), take the reading 
+                            // wait 20 miliseconds and turn off 
                               digitalWrite(trig, HIGH);
-                              delayMicroseconds(10);
+                              delay(20);
                               digitalWrite(trig, LOW);
                             
+                            // measure duration of pulse recieved on echo pin 
                               duration = pulseIn(echo, HIGH);
-                              distance = distance = duration * 17 / 1000;  // ultrasonicread()
                             
+                              // library method for calcutaing distance w less noise and 
+                              // increased accuracy. Converts duration to cm! 
+                              distance = ultrasonic.read(); 
+                            
+                            // if distance is less than or equal to 10cm, print 'slower.'
+                            // reduce motor speed to 125 (around half speed)
                               if (distance <= 10) {
                                 Serial.println("slower.");
                                 analogWrite(motorControl, 125);
-                                delay(100);
+                                delay(80); // wait 80 miliseconds
                               }
+
+                            // if distance is less than or equal to 10cm, print 'faster.'
+                            // increase motor speed to 200 (around 80% speed)
                               if (distance >= 10) {
                                 Serial.println("faster.");
-                                analogWrite(motorControl, 255);
-                                delay(100);
+                                analogWrite(motorControl, 200);
+                                delay(80); // wait 80 miliseconds
                               }
-                              delay(10);
+                              delay(10); // wait 10 miliseconds before new measurement
                             }
                     </pre>
     </div>
