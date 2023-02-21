@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, maximum-scale=1.0" />
+
+    <title>Assignment 5 - Higher voltage and transistors!</title>
+
+    <link href="style.css" media="screen" rel="stylesheet" type="text/css" />
+
+</head>
+
+<body>
+    <div class="page">
+        <div class="header">
+            <h1>Assignment 5 was High(er) voltage and transistors!</h1>
+            <h2><u>Project Description:</u></h2>
+            <p>This project required us to create create a schematic, circuit, and code that uses a transistor
+                to control load power separate from logic power. We had to use analogWrite(), a high-load output
+                device, and an input sensor that uses a library.
+            </p>
+
+            <body>
+                <h2><u>Here is the video:</u></h2>
+                <div class="row">
+                    <div class="column">
+                        <video src="Higher Voltage assets/slower.mp4" controls width="300"></video>
+                    </div>
+                    <div class="column">
+                        <video src="Higher Voltage assets/fast.mp4" controls width="300"></video>
+                    </div>
+                    <p> When the sensor detects something less than 10cm away, the motor is noticeably
+                        slower. Pretty cool, eh? But how did we get here? First we have to gather
+                        our hardware and do some calculations. calculation**
+                    </p>
+                </div>
+            </body>
+
+            <p> Based on our calculations, the nearest resistor value available in our kit is
+                250 or 330 ohms. I decided to use the 330 ohm resistors. Now we can draw our schematic!
+            <h2><u>Circuit and Schematic:</u></h2>
+            <div class="row">
+                <div class="column">
+                    <img src="Higher Voltage assets/schematic.png" style="width:100%">
+                </div>
+                <div class="column">
+                    <img src="Higher Voltage assets/circuit.png" style="width:100%">
+                </div>
+            </div>
+            </p>
+        </div>
+    </div>
+    <h2><u>Code:</u></h2>
+    <p>-Here is the code snippet-
+    <div class="codebox">
+        <pre>
+                            #include <Servo.h>
+                            #include <Ultrasonic.h>
+                            
+                            Servo servo;
+                            Ultrasonic ultrasonic(10, 11);
+                            
+                            #define trig 10
+                            #define echo 11
+                            const int motorControl = 6;
+                            
+                            void setup() {
+                              pinMode(motorControl, OUTPUT);
+                              Serial.begin(9600);
+                              pinMode(trig, OUTPUT);
+                              pinMode(echo, INPUT);
+                            }
+                            
+                            void loop() {
+                            
+                              long duration, distance;
+                              digitalWrite(trig, LOW);
+                              digitalWrite(echo, LOW);
+                              delayMicroseconds(2);
+                              digitalWrite(trig, HIGH);
+                              delayMicroseconds(10);
+                              digitalWrite(trig, LOW);
+                            
+                              duration = pulseIn(echo, HIGH);
+                              distance = distance = duration * 17 / 1000;  // ultrasonicread()
+                            
+                              if (distance <= 10) {
+                                Serial.println("slower.");
+                                analogWrite(motorControl, 125);
+                                delay(100);
+                              }
+                              if (distance >= 10) {
+                                Serial.println("faster.");
+                                analogWrite(motorControl, 255);
+                                delay(100);
+                              }
+                              delay(10);
+                            }
+                    </pre>
+    </div>
+    </p>
+
+</body>
+
+</html>
