@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, maximum-scale=1.0" />
+
+    <title>Assignment 6 - Talking to the Web!</title>
+
+    <link href="style.css" media="screen" rel="stylesheet" type="text/css" />
+
+</head>
+
+<body>
+    <div class="page">
+        <div class="header">
+            <h1>Assignment 6 was Talking to the Web!</h1>
+            <h2><u>Project Description:</u></h2>
+            <p> For this Project we had to create a webpage with p5.js that interacts with your arduino.
+                I decided to make an interactive dark mode webpage by using the photoresistor that can change
+                the darkness of your browser! Our webpage must be interactive and use a minimum of two
+                input devices from the arduino (e.g. the joystick counts as 2 inputs) and a minimum of one output device
+                from the arduino,
+                e.g. an LED.</p>
+
+            <body>
+                <h2><u>Here is the video:</u></h2>
+                <div class="row">
+                    <div class="column">
+                        <video src="Talking to the Web assets/IMG_6387.mp4" controls width="300"></video>
+                    </div>
+                    <div class="column">
+                        <video src="Talking to the Web assets/IMG_6390.mp4" controls width="300"></video>
+                    </div>
+                </div>
+            </body>
+
+            <p> * Please see: I added a code using p5.js to turn off the phototransistor connected to pin A0 on the
+                Arduino board when a mouse is clicked on the canvas. When mouse is at a clicked state, the canvas will 
+                stay bright *
+            </p>
+
+            <h2><u>Circuit and Schematic:</u></h2>
+            <div class="row">
+                <div class="column">
+                    <img src="Talking to the Web assets/calculations and schematic.jpeg" style="width:50%">
+                </div>
+            </div>
+            <h2><u>Code:</u></h2>
+            <p>- Here's the code snippet -
+            <div class="codebox">
+                <div class="row">
+                    <div class="column">
+                        <pre>
+
+**** Here is the arduino code **** 
+            
+// delcare button as digital pin 2, and photoresistor 
+// as analog pin A0
+int Button = 2; 
+int photoresistor = A0; 
+// dataval will store values from the photoresistor 
+int dataval = 0; 
+
+void setup() {
+// initialize serial communication 
+Serial.begin(9600); 
+// set button as input 
+pinMode(pushButton, INPUT); 
+}
+                                
+void loop() {
+// read and store photoresistor value
+dataval = analogRead(photoresistor);
+// print value on serial monitor 
+Serial.println(dataval); 
+// read button input 
+int buttonState = digitalRead(Button); 
+// print state of button 
+Serial.println(buttonState); 
+// give a small delay for system
+delay(10); 
+                                }
+                                
+                             </pre>
+                    </div>
+
+                    <div class="column">
+                        <pre>
+
+**** Here is the sketch code **** 
+            
+// variable to hold an instance of the serialport library
+var serial; 
+//rename to the name of your port
+var portName = '/dev/cu.usbmodem101' 
+//some data coming in over serial!
+var dataIn; 
+
+
+function setup() {
+  //make new instance of serial port
+  serial = new p5.SerialPort();      
+  // set a callback function for the serialport list event 
+  serial.on('list', printList);    
+  // callback for connecting to the server  
+  serial.on('connected', serverConnected);
+  // callback for the port opening
+  serial.on('open', portOpen);       
+  // callback for when new data arrives
+  serial.on('data', serialEvent); 
+  // callback for errors    
+  serial.on('error', serialError);    
+  // callback for the port closing
+  serial.on('close', portClose);      
+ 
+  serial.list();  
+  // list the serial ports                   
+  serial.open(portName);
+  // open a serial port, create canvas on webpage              
+  createCanvas(1200, 800);
+  background(0x08, 0x16, 0x40);
+}
+ 
+// get the list of ports:
+function printList(portList) {
+ // portList is an array of serial port names
+ for (var i = 0; i < portList.length; i++) {
+ // Display the list the console:
+   print(i + " " + portList[i]);
+ }
+}
+
+function serverConnected() {
+  print('connected to server.');
+}
+ 
+function portOpen() {
+  print('the serial port opened.')
+}
+ 
+function serialError(err) {
+  print('Something went wrong with the serial port. ' + err);
+}
+ 
+function portClose() {
+  print('The serial port closed.');
+}
+
+function serialEvent() {
+  if (serial.available()) {
+  	dataIn = Number(serial.readLine());
+        //console.log(datain);
+  } 
+}
+
+function draw() {
+// the draw() function continuously executes the lines of code contained 
+// inside its block until the program is stopped or noLoop() is called.
+// if the dataIn is not equal to 0 and 1, it checks the value of dataIn
+  if (dataIn != 0 && dataIn != 1) {
+    if (dataIn >= 30 && dataIn <= 50) {
+// depending oon which range dataIn is at, the background of the canvas
+// changes to different shades of blue/black.
+// note dataIn is the data retrieved from the photoresistor; the brighter
+// it is, the brighter your webpage will be!
+      background(0);
+    } else if (dataIn >= 50 && dataIn <= 80) {
+      background("#00008B");
+    } else if (dataIn >= 80 && dataIn <= 120) {
+      background("#0000FF");
+    } else {
+      background("#ADD8E6 ");
+    }
+  }
+
+  // if dataIN is* equal to 1, print "button is pressed" on webpage
+  // if not, there's is no text.  
+  if (dataIn == 1) {
+    text("button is pressed", 30,30);
+} else {
+    text("", 30,30);
+}
+// Override the data from to pin A0 and pin 2 on the Arduino board 
+// when a mouse is clicked on the canvas!
+// when mouse is in a clicked state, the canvas will stay bright 
+function mouseClicked() {
+  serial.write('120');
+}
+}
+
+
+                                
+                             </pre>
+                    </div>
+                    </p>
+
+</body>
+
+</html>
