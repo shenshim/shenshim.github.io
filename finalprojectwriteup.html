@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, maximum-scale=1.0" />
+
+    <title> Pet Me for Flowers! </title>
+    <img src="finalprojectassets/product photo.png" width=200></a>
+
+    <link href="style.css" media="screen" rel="stylesheet" type="text/css" />
+
+</head>
+
+<body>
+    <div class="page">
+        <div class="header">
+            <h1>This is my final project documentation!</h1>
+            <h2><u>Concept Description:</u></h2>
+            <p>Pet me for flowers is a cute interactive display to help attract attention of passerbys at makerfairs. It can also be
+                used for advertising the vendor's product. It's essentially a duck plushie that is connected to a linear actuator ontop of a box,
+                with a flower hidden inside it (also attached to another linear actuator). There is a capacitive sensor on the plushie so when you pet it, 
+                it does a little jump, and out of the box emerges a lotus flower.
+            </p>
+
+            <body>
+                <h2><u>Here are the videos:</u></h2>
+                <div class="row">
+                    <div class="column">
+                        <video src="finalprojectassets/presentationvideo.mp4" controls width="300"></video>
+                    </div>
+                    <div class="column">
+                        <video src="finalprojectassets/test1.mp4" controls width="300"></video>
+                    </div>
+                </div>
+                        <p>
+                            These are all the materials I used: Arduino (5V), breadboard, jump wires, alligator clip, two microservos, 1 megaohm resistor and 
+                            foil for capacitive touch, yarn (to make plushie), plywood (to lasercut box), some paper, and access to filament to 3D print the actuator.
+                            Everything in this project was built from scratch. We have two servos (one attached to pin 10 that controls the flowers, one to pin 11 that controls the duck; 
+                            they are operating independently) that are mounted on an actuator. For the resistor, since a capacitor is created from two conductors with a dielectric between them,
+                            the capacitance of the capacitor is determined by the surface area of the conductors and the distance between them. Using a higher resistance means that you can use a smaller capacitance,
+                            (be further away from the sensor) to get the same results as if you were close to the sensor. I used the biggest resistor value I had since my plushie would be covering
+                            most of the sensor area. The schematic and circuitry below will further detail how everything was implemented together. 
+                        </p>
+            </body>
+        
+            <h2><u>Circuit and Schematic:</u></h2>
+            <div class="row">
+                <div class="column">
+                    <img src="finalprojectassets/circuitry.png" style="width:100%">
+                </div>
+                <div class="column">
+                    <img src="finalprojectassets/schematic.png" style="width:100%">
+                </div>
+            </div>
+            </p>
+        </div>
+    </div>
+    <h2><u>Code:</u></h2>
+    <p>-Here is the code snippet-
+    <div class="codebox">
+        <pre>
+
+                #include <Servo.h>  //includes library for servo
+                #include <CapacitiveSensor.h>  //includes library for capacitive sensor
+                
+                //initializes preliminary variables for mapping, set servoMap1 and servoMap2 to 90 degrees
+                int servoMap1 = 90, servoMap2 = 90, sensorValue, sensorMax, sensorMin; 
+
+                Servo myServo1, myServo2;                           //declares servo objects
+                CapacitiveSensor cs_4_2 = CapacitiveSensor(4, 2);  //declares capacitive sensor object between pins 4 and 2
+                
+                void setup() {
+                  cs_4_2.set_CS_AutocaL_Millis(0xFFFFFFFF);     //autocalibrates capacitive sensor
+                  Serial.begin(9600);                           //begins serial
+                  myServo1.attach(11);                          //declares first servo as attached to pin 11
+                  myServo2.attach(10);                          //declares second servo as attached to pin 10
+                  while (millis() < 5000) {                     //loop for 5 seconds
+                    sensorValue = cs_4_2.capacitiveSensor(30);  //takes capacitive sensor measurement
+                    if (sensorValue > sensorMax) {              //checks if measurement is greater than existing max
+                      sensorMax = sensorValue;                  //replaces it if greater than existing max
+                    }
+                    if (sensorValue < sensorMin) {  //checks if measurement is less than existing min
+                      sensorMin = sensorValue;      //replaces it if so
+                    }
+                  }
+                }
+                
+                void loop() {
+                  long start = millis();                      //stores time in milliseconds
+                  long total1 = cs_4_2.capacitiveSensor(30);  //stores capacitive sensor measurement
+                
+                  // Map the measurement to the range of the first servo and move it
+                  servoMap1 = map(total1, sensorMin, sensorMax, 0, 180);
+                  myServo1.write(servoMap1);
+                
+                  // Map the measurement to the range of the second servo and move it
+                  servoMap2 = map(total1, sensorMin, sensorMax, 0, 180);
+                  myServo2.write(servoMap2);
+                
+                  Serial.print(millis() - start);  //prints performance calculation
+                  Serial.print("\t");              //prints a tab
+                
+                  Serial.println(total1);  //prints measurement
+                  delay(100);              //100 millisecond delay
+                }
+
+        </pre>
+    </div>
+    </p>
+
+</body>
+
+</html>
